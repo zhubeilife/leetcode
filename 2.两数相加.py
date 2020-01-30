@@ -12,35 +12,30 @@
 #         self.next = None
 
 # 20200130 v1
-# 采用把连个数字给拆出来的方法来做, 通过看leetcode讨论, 在C++中会出现long long这种数据类型都会溢出的情况, 然后看到python(In Python, value of an integer is not restricted by the number of bits and can expand to the limit of the available memory) 原因所以不会溢出.
 #
-# 在v1的基础上, 采用string来进行数字的转换
+# 1- 改进, 利用if l1 代替 if l1 == None, 使得表达更加简练
+# 2- 最后返回的是dummy_head.next, 浪费一个节点, 使得表达更加的简练(跟commit 1045198 比较额)
 #
-# 1563/1563 cases passed (80 ms)
-# Your runtime beats 51.35 % of python3 submissions
-# Your memory usage beats 59.62 % of python3 submissions (13.1 MB)
+# 1563/1563 cases passed (64 ms)
+# Your runtime beats 95.01 % of python3 submissions
+# Your memory usage beats 59.21 % of python3 submissions (13.2 MB)
 
 class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         carry = 0;
-        result = ListNode(0)
-        current = result
+        dummy_head = ListNode(0)
+        current = dummy_head
 
-        while True:
-            sum = (l1.val if l1 != None else 0) + (l2.val if l2 != None else 0) + carry
+        while l1 or l2 or carry == 1:
+            sum = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
             carry = sum // 10
             sum = sum % 10
 
-            current.val = sum
-
-            l1 = l1.next if l1 != None else None
-            l2 = l2.next if l2 != None else None
-
-            if l1 == None and l2 == None and carry == 0:
-                break
-
-            current.next = ListNode(0)
+            current.next = ListNode(sum)
             current = current.next
 
-        return result
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+
+        return dummy_head.next
 # @lc code=end
